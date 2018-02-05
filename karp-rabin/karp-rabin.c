@@ -193,7 +193,7 @@ static uint32_t* karp_rabin(char* text, char* pattern, uint32_t num_rounds) {
 
                 has_errors = has_false_occurrences(text, pattern, occ);
         }
-        free(rng);
+        gsl_rng_free(rng);
         return occ;
 }
 
@@ -206,8 +206,11 @@ static char* read_text(char* filename) {
         int res = kseq_read(seq);
         assert(res >= 0);
         gzclose(fp);
-        return seq->seq.s;
-        // kseq_destroy(seq);
+        char* text = (char*) calloc(seq->seq.l + 1, sizeof(char));
+        assert(text != NULL);
+        strcpy(text, seq->seq.s);
+        kseq_destroy(seq);
+        return text;
 }
 
 int main(int argc, char **argv) {
@@ -225,7 +228,7 @@ int main(int argc, char **argv) {
                 printf("Occurrence %s at position %u\n", x, occ[i]);
         }
 
-        free(pattern);
         free(text);
         free(occ);
+        cmdline_parser_free(&args_info);
 }
