@@ -97,14 +97,16 @@ static uint32_t next_h(uint32_t f, const char out, const char in, const uint32_t
 /*
   compare string case insensitive
 */
-static bool strcmpi(char* const string1, char* const string2) {
+static bool strcmpi(const char* const string1, const char* const string2) {
+        char* lwr_string1 = strndupa(string1, strlen(string1));
+        char* lwr_string2 = strndupa(string2, strlen(string2));
         for(uint32_t i = 0; string1[i]; i++){
-                string1[i] = tolower(string1[i]);
+                lwr_string1[i] = tolower(lwr_string1[i]);
         }
         for(uint32_t i = 0; string2[i]; i++){
-                string2[i] = tolower(string2[i]);
+                lwr_string2[i] = tolower(lwr_string2[i]);
         }
-        return strcmp(string1, string2);
+        return strcmp(lwr_string1, lwr_string2);
 }
 
 /*
